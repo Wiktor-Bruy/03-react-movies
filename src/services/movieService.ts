@@ -10,7 +10,7 @@ interface Headers {
 }
 
 interface Answer {
-  dada: MovArr;
+  data: MovArr;
   Status: number;
   StatusText: string;
 }
@@ -19,19 +19,25 @@ interface MovArr {
   results: Movie[];
 }
 
-export default function fetchMovies(query: string) {
+export default async function fetchMovies(
+  query: string
+): Promise<Movie[] | unknown> {
+  const token: string = import.meta.env.VITE_TMDB_TOKEN;
+
   const config: Config = {
     headers: {
-      Authorization:
-        'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4YTkzMjRjZTQ0MDBkZjM0YjgwYzg5OWM4MTRiODA3YSIsIm5iZiI6MTc2Njg0MDQ2MC42Niwic3ViIjoiNjk0ZmQ4OGM2ZGZkODE0MDY3MTU1MjU3Iiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9.3JDqMgTFd8aZnX-hJZbXqLjN6LIyG_eXe3RN3QQVu0Q',
+      Authorization: `Bearer ${token}`,
     },
   };
 
-  axios
-    .get(
+  try {
+    const res: Answer = await axios.get(
       `https://api.themoviedb.org/3/search/movie?query=${query}&include_adult=false&language=en-US&page=1`,
       config
-    )
-    .then(res => res.data.results)
-    .catch(er => er);
+    );
+
+    return res.data.results;
+  } catch (er) {
+    return er;
+  }
 }
