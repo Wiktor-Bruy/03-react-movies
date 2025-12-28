@@ -35,9 +35,11 @@ export default async function fetchMovies(
       `https://api.themoviedb.org/3/search/movie?query=${query}&include_adult=false&language=en-US&page=1`,
       config
     );
-
-    return res.data.results;
-  } catch (er) {
-    return er;
+    if (res.data.results) {
+      return res.data.results;
+    }
+    return;
+  } catch {
+    return;
   }
 }
