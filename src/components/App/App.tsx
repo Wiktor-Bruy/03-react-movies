@@ -29,10 +29,21 @@ export default function App() {
   function onClickCard(index: number): void {
     setIsModal(true);
     setModal({ ...movies[index] });
+    document.body.style.overflow = 'hidden';
   }
 
   function closeModal() {
+    setModal({
+      id: 0,
+      poster_path: '',
+      backdrop_path: '',
+      title: '',
+      overview: '',
+      release_date: '',
+      vote_average: 0,
+    });
     setIsModal(false);
+    document.body.style.overflow = '';
   }
 
   async function findFilms(query: string): Promise<void> {
