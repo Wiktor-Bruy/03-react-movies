@@ -2,6 +2,7 @@ import SearchBar from '../SearchBar/SearchBar.tsx';
 import Loader from '../Loader/Loader.tsx';
 import ErrorMessage from '../ErrorMessage/ErrorMessage.tsx';
 import MovieGrid from '../MovieGrid/MovieGrid.tsx';
+import MovieModal from '../MovieModal/MovieModal.tsx';
 
 import fetchMovies from '../../services/movieService.ts';
 import toast, { Toaster } from 'react-hot-toast';
@@ -14,6 +15,25 @@ export default function App() {
   const [isMovies, setIsMovies] = useState(false);
   const [isErr, setIsErr] = useState(false);
   const [isLoad, setIsLoad] = useState(false);
+  const [isModal, setIsModal] = useState(false);
+  const [modal, setModal] = useState<Movie>({
+    id: 0,
+    poster_path: '',
+    backdrop_path: '',
+    title: '',
+    overview: '',
+    release_date: '',
+    vote_average: 0,
+  });
+
+  function onClickCard(index: number): void {
+    setIsModal(true);
+    setModal({ ...movies[index] });
+  }
+
+  function closeModal() {
+    setIsModal(false);
+  }
 
   async function findFilms(query: string): Promise<void> {
     setIsLoad(true);
@@ -53,9 +73,10 @@ export default function App() {
     <>
       <Toaster />
       <SearchBar onSubmit={findFilms} />
-      {isMovies && <MovieGrid movies={movies} />}
+      {isMovies && <MovieGrid movies={movies} onSelect={onClickCard} />}
       {isErr && <ErrorMessage />}
       {isLoad && <Loader />}
+      {isModal && <MovieModal movie={modal} onClose={closeModal} />}
     </>
   );
 }
