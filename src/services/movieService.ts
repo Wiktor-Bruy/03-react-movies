@@ -38,7 +38,7 @@ export default async function fetchMovies(
     if (res.data.results) {
       return res.data.results;
     }
-    return;
+    return [];
   } catch {
     return;
   }

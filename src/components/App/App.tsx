@@ -26,9 +26,9 @@ export default function App() {
     vote_average: 0,
   });
 
-  function onClickCard(index: number): void {
+  function onClickCard(index: Movie): void {
     setIsModal(true);
-    setModal({ ...movies[index] });
+    setModal(index);
     document.body.style.overflow = 'hidden';
   }
 
