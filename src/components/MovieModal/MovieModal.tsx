@@ -6,7 +6,7 @@ import React, { useEffect } from 'react';
 import { type Movie } from '../../types/movie.ts';
 
 interface MovieModalProps {
-  movie: Movie;
+  movie: Movie | null;
   onClose: () => void;
 }
 
@@ -24,11 +24,17 @@ export default function MovieModal({ movie, onClose }: MovieModalProps) {
       }
     }
     document.addEventListener('keydown', closeModal);
+    document.body.style.overflow = 'hidden';
 
     return () => {
       document.removeEventListener('keydown', closeModal);
+      document.body.style.overflow = '';
     };
   }, [onClose]);
+
+  if (movie === null) {
+    return;
+  }
 
   return createPortal(
     <div
